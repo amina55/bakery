@@ -12,6 +12,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mystyle.css') }}" rel="stylesheet">
+
 
     <!-- Scripts -->
     <script>
@@ -36,14 +40,18 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name', 'Bakery Store') }}
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        @if(Auth::user() && Auth::user()->type == 'store_manager')
+                            <li><a href="{{ route('item.index') }}">Raw Item</a></li>
+                            <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
+                            <li><a href="{{ route('supplier.index') }}">Supplier</a></li>
+                        @endif&nbsp;
                     </ul>
 
                     <!-- Right Side Of Navbar -->

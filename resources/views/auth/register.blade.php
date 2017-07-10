@@ -23,7 +23,49 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+                            <label for="type" class="col-md-4 control-label">User Type</label>
 
+                            <div class="col-md-6">
+                                <select id="type" class="form-control" name="type" required autofocus>
+                                    <option value="store_manager">Store Manager</option>
+                                    <option value="kitchen_manager">Kitchen Manager</option>
+                                    <option value="bakery_manager">Bakery Manager</option>
+                                </select>
+
+                                @if ($errors->has('type'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('type') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
+                            <label for="username" class="col-md-4 control-label">Username</label>
+
+                            <div class="col-md-6">
+                                <input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" required autofocus>
+
+                                @if ($errors->has('username'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('username') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('phone_no') ? ' has-error' : '' }}">
+                            <label for="phone_no" class="col-md-4 control-label">Phone No.</label>
+
+                            <div class="col-md-6">
+                                <input id="phone_no" type="text" class="form-control" name="phone_no" value="{{ old('phone_no') }}" required autofocus>
+
+                                @if ($errors->has('phone_no'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone_no') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 

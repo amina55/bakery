@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\RawItem;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -23,8 +24,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
+        Route::pattern('id', '[0-9]+');
+        Route::model('item', RawItem::class);
         parent::boot();
     }
 

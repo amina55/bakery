@@ -12,9 +12,26 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $view = 'auth.login';
+    if(\Illuminate\Support\Facades\Auth::check()) {
+       $view = 'home';
+    }
+    return view($view);
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+
+Route::group(['middleware' => 'auth'], function (){
+
+    Route::get('/home', 'HomeController@index');
+    Route::get('user/profile', 'UserController@showProfile')->name('profile');
+
+    Route::group(['namespace' => 'Store', 'middleware' => 'role:store_manager', 'prefix' => 'store'], function (){
+        Route::resource('item', 'RawItemController');
+        Route::resource('supplier', 'SupplierController');
+        Route::resource('invoice', 'InvoiceController');
+
+    });
+});

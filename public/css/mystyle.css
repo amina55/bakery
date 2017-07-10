@@ -1,0 +1,15 @@
+table, th, td {
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+.row {
+    margin-top: 10px;
+}
+.style-btn {
+    color: darkred;
+    background-color: antiquewhite;
+    padding: 5px 20px;
+}
+.panel-body {
+    padding-top: 20px;
+}
