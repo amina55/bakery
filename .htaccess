@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^bakery_system/public
+RewriteRule ^(.*)$ bakery_system/public/$1 [L]
