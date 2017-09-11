@@ -59,10 +59,10 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::group(['namespace' => 'Kitchen', 'middleware' => 'role:kitchen_manager', 'prefix' => 'kitchen'], function (){
 
-        Route::group(['prefix' => 'item'], function (){
-            Route::get('destroy/{item}', 'RawItemController@destroy')->name('item.destroy');
+        Route::group(['prefix' => 'kitchen_item'], function (){
+            Route::get('destroy/{kitchen_item}', 'RawItemController@destroy')->name('kitchen_item.destroy');
         });
-        Route::resource('item', 'RawItemController', ['except' => ['show', 'destroy']]);
+        Route::resource('kitchen_item', 'RawItemController', ['except' => ['show', 'destroy']]);
 
     });
 
