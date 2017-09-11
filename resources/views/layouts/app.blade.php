@@ -14,10 +14,17 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/variables.css') }}" rel="stylesheet">
     <link href="{{ asset('css/mystyle.css') }}" rel="stylesheet">
 
 
     <!-- Scripts -->
+    {{--<script src="{{ asset('js/app.js') }}"></script>--}}
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -47,11 +54,20 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        @if(Auth::user() && Auth::user()->type == 'store_manager')
-                            <li><a href="{{ route('item.index') }}">Raw Item</a></li>
-                            <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
-                            <li><a href="{{ route('supplier.index') }}">Supplier</a></li>
-                        @endif&nbsp;
+                        @if(Auth::user())
+                            @if(Auth::user()->type == 'store_manager')
+                                <li><a href="{{ route('item.index') }}">Raw Item</a></li>
+                                <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
+                                <li><a href="{{ route('supplier.index') }}">Supplier</a></li>
+                            @elseif(Auth::user()->type == 'kitchen_manager')
+                                {{--<li><a href="{{ route('item.index') }}">Raw Item</a></li>
+                                <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
+                                <li><a href="{{ route('supplier.index') }}">Supplier</a></li>--}}
+                            @elseif(Auth::user()->type == 'bakery_manager')
+                                <li><a href="{{ route('category.index') }}">Category</a></li>
+                                <li><a href="{{ route('product.index') }}">Products</a></li>
+                            @endif
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -88,8 +104,5 @@
 
         @yield('content')
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

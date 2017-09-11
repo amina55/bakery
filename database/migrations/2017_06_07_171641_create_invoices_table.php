@@ -17,9 +17,12 @@ class CreateInvoicesTable extends Migration
             $table->increments('id');
             $table->string('supplier_invoice_id', 50)->unique();
             $table->timestamp('date');
-            $table->unsignedInteger('total_amount');
-            $table->unsignedInteger('paid_amount');
-            $table->unsignedInteger('remaining');
+            $table->integer('total_amount');
+            $table->integer('total_tax');
+            $table->integer('total_discount');
+            $table->integer('payable_amount');
+            $table->integer('paid_amount');
+            $table->integer('remaining');
             $table->unsignedInteger('supplier_id');
             $table->timestamps();
 

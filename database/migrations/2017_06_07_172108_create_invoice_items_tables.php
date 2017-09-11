@@ -18,8 +18,8 @@ class CreateInvoiceItemsTables extends Migration
             $table->unsignedInteger('invoice_id');
             $table->unsignedInteger('raw_item_id');
             $table->unsignedInteger('price');
-            $table->unsignedInteger('count');
-            $table->unsignedInteger('total_amount');
+            $table->unsignedInteger('quantity');
+            $table->unsignedInteger('amount');
             $table->integer('discount_percentage');
             $table->integer('discount_amount');
             $table->unsignedInteger('payable_amount');

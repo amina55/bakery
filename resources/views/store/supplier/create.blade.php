@@ -23,8 +23,8 @@
 
                                     @if ($errors->has('name'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('name') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -38,8 +38,8 @@
 
                                     @if ($errors->has('identifier'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('identifier') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('identifier') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -52,8 +52,8 @@
 
                                     @if ($errors->has('address'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('address') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -66,8 +66,8 @@
 
                                     @if ($errors->has('phone_no'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('phone_no') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('phone_no') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>

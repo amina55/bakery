@@ -28,7 +28,7 @@ class RawItemController extends Controller
      */
     public function create()
     {
-        return view('store.items.create');
+        return view('store.items.create', ['item' => null]);
     }
 
     /**
@@ -71,9 +71,7 @@ class RawItemController extends Controller
      */
     public function edit(RawItem $rawItem)
     {
-        echo "<pre>";
-        echo "in edit ";
-        print_r($rawItem);
+        return view('store.items.create', ['item' => $rawItem]);
     }
 
     /**
@@ -85,7 +83,10 @@ class RawItemController extends Controller
      */
     public function update(Request $request, RawItem $rawItem)
     {
-
+        $rawItem->description = $request->get('description');
+        $rawItem->unit = $request->get('unit');
+        $rawItem->save();
+        return redirect()->route('item.index');
     }
 
     /**
@@ -96,8 +97,7 @@ class RawItemController extends Controller
      */
     public function destroy(RawItem $rawItem)
     {
-        echo "<pre>";
-        echo "in delete ";
-        print_r($rawItem);
+        $rawItem->delete();
+        return redirect()->back();
     }
 }
