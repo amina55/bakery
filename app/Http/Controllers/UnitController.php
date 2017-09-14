@@ -14,8 +14,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $units = Unit::all();
-
+        $units = Unit::getActive();
         return view('unit.index', ['units' => $units]);
     }
 

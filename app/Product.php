@@ -12,4 +12,9 @@ class Product extends Model
     {
         return $this->belongsTo('App\Unit');
     }
+
+    public static function getProduct()
+    {
+        return self::where('status', 1)->get();
+    }
 }

@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::getCategory();
         return view('bakery.category.index', ['categories' => $categories]);
     }
 

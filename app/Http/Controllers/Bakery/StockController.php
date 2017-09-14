@@ -17,14 +17,14 @@ class StockController extends Controller
     public function index()
     {
         $stock = BakeryStock::with('product')->get();
-        $products = Product::all();
+        $products = Product::getProduct();
         return view('bakery.stock.index', ['stocks' => $stock, 'products' => $products]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -32,7 +32,7 @@ class StockController extends Controller
         $inputs = $request->all();
         unset($inputs['_token']);
 
-        if($request->has('id')) {
+        if ($request->has('id')) {
             BakeryStock::where('id', $request->get('id'))->update($inputs);
         } else {
             BakeryStock::create($inputs);

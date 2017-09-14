@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         $products = Product::where('category_id', $categoryID)->with('unit')->get();
         $category = Category::find($categoryID);
-        $units = Unit::all();
+        $units = Unit::getActive();
         return view('bakery.product.index', ['products' => $products, 'category' => $category, 'units' => $units]);
     }
 

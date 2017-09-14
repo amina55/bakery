@@ -21,6 +21,7 @@ class CategorySeeder extends Seeder
         $products = ['Chiken Puff (PC)', 'Chocolate Cake Muffin', 'Chocochips Cake', 'Chocolate Barfi', 'Chocolate Mango Moose'];
         $prices  = [500, 1000, 600, 700, 300];
 
+        $unitId = \App\Unit::getId('pound');
 
         for($i = 0; $i < count($products); $i++)
         {
@@ -28,6 +29,7 @@ class CategorySeeder extends Seeder
                 'name' => $products[$i],
                 'price' => $prices[$i],
                 'category_id' => $category->id,
+                'unit_id' => $unitId,
             ]);
         }
 
@@ -46,6 +48,7 @@ class CategorySeeder extends Seeder
                 'name' => $products[$i],
                 'price' => $prices[$i],
                 'category_id' => $category->id,
+                'unit_id' => $unitId,
             ]);
         }
 
