@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Requests\RawItemCreateRequest;
 use App\RawItem;
+use App\Unit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +17,7 @@ class RawItemController extends Controller
      */
     public function index()
     {
-        $items = RawItem::all();
+        $items = RawItem::getRawItems();
         return view('store.items.index', ['items' => $items]);
 
     }
@@ -28,7 +29,7 @@ class RawItemController extends Controller
      */
     public function create()
     {
-        return view('store.items.create', ['item' => null]);
+        return view('store.items.create', ['item' => null, 'units' => Unit::getActive()]);
     }
 
     /**
@@ -43,7 +44,7 @@ class RawItemController extends Controller
         RawItem::create([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
-            'unit' => $request->get('unit'),
+            'unit_id' => $request->get('unit_id'),
             'stock' => $request->get('stock'),
         ]);
         if($request->has('add_and_create_new')) {
@@ -71,7 +72,7 @@ class RawItemController extends Controller
      */
     public function edit(RawItem $rawItem)
     {
-        return view('store.items.create', ['item' => $rawItem]);
+        return view('store.items.create', ['item' => $rawItem, 'units' => Unit::getActive()]);
     }
 
     /**
@@ -84,7 +85,7 @@ class RawItemController extends Controller
     public function update(Request $request, RawItem $rawItem)
     {
         $rawItem->description = $request->get('description');
-        $rawItem->unit = $request->get('unit');
+        $rawItem->unit_id = $request->get('unit_id');
         $rawItem->save();
         return redirect()->route('item.index');
     }

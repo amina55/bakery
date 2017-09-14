@@ -17,9 +17,13 @@ class CreateRawItemsTable extends Migration
             $table->increments('id');
             $table->string('name', 100)->unique();
             $table->string('description', 200);
-            $table->string('unit', 20);
-            $table->unsignedInteger('stock')->default(0);
+            $table->float('stock')->default(0);
+            $table->unsignedInteger('unit_id')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
+
+            $table->foreign('unit_id')->references('id')->on('units');
+
         });
     }
 

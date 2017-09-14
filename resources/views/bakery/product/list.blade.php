@@ -3,22 +3,25 @@
         <thead>
         <tr>
             <th> Name</th>
-            <th> Description </th>
+            <th> Price </th>
+            <th> Unit </th>
+
             <th>{{ trans('content.actions') }}</th>
         </tr>
         </thead>
         <tbody>
-        @foreach($categories as $category)
+        @foreach($products as $product)
             <tr>
-                <td>{{ $category->name }}</td>
-                <td>{{ $category->description }}</td>
+                <td>{{ $product->name }}</td>
+                <td>{{ $product->price }}</td>
+                <td>{{ ($product->unit) ? $product->unit->name : '' }}</td>
 
                 <td class="centralized-text">
-                    <a  class="no-text-decoration edit_category" title="Edit Category" data-toggle="modal" data-target="#editCategoryModal"
-                       data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{ $category->description }}">
+                    <a  class="no-text-decoration edit_product" title="Edit product" data-toggle="modal" data-target="#editProductModal"
+                       data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-unit="{{ $product->unit_id }}">
                         <i class="fa fa-lg fa-pencil"></i>
                     </a>
-                    <a href="{{ route('category.destroy', [$category->id]) }}" class="no-text-decoration" title="Delete Category">
+                    <a href="{{ route('product.destroy', [$product->id]) }}" class="no-text-decoration" title="Delete product">
                         <i class="fa fa-lg fa-trash"></i>
                     </a>
                 </td>
@@ -28,21 +31,23 @@
     </table>
 </div>
 
-<div id="editCategoryModal" class="modal fade" role="dialog">
+<div id="editProductModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-        <form class="form-horizontal" action="{{ route('category.store') }}" method="post">
+        <form class="form-horizontal" action="{{ route('product.store') }}" method="post">
         {{ csrf_field() }}
 
         <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Edit Category</h4>
+                    <h4 class="modal-title">Edit Product</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <input type="hidden" name="id" id="edit_id">
+                        <input type="hidden" name="category_id" value="{{ $category->id }}">
+
                         <label for="edit_name" class="col-md-4 control-label">Name</label>
 
                         <div class="col-md-6">
@@ -51,10 +56,28 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="edit_description" class="col-md-4 control-label">Description</label>
+                        <label for="edit_price" class="col-md-4 control-label">Price</label>
 
                         <div class="col-md-6">
-                            <textarea rows="3" id="edit_description" class="form-control" name="description" required></textarea>
+                            <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0" id="edit_price" class="form-control" name="price" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group{{ $errors->has('unit_id') ? ' has-error' : '' }}" >
+                        <label for="unit_id" class="col-md-4 control-label">unit</label>
+
+                        <div class="col-md-6">
+                            <select id="unit_id" name="unit_id" class="form-control" required>
+                                <option  value="">--- select a unit ---</option>
+                                @foreach($units as $unit)
+                                    <option value="{{ $unit->id }}">{{$unit->name}}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('unit_id'))
+                                <span class="help-block">
+                                        <strong>{{ $errors->first('unit_id') }}</strong>
+                                    </span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -68,15 +91,19 @@
 </div>
 
 <script>
-    $('.edit_category').click(function () {
+    $('.edit_product').click(function () {
 
         var id = $(this).data('id');
         var name = $(this).data('name');
-        var description = $(this).data('description');
+        var price = $(this).data('price');
+        var unit = $(this).data('unit');
 
         $('#edit_name').val(name);
-        $('#edit_description').val(description);
+        $('#edit_price').val(price);
         $('#edit_id').val(id);
+        $('select[name^="unit_id"] option[value="'+unit+'"]').attr("selected","selected");
+
+
     });
 </script>
 

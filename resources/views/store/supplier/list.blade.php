@@ -3,7 +3,6 @@
         <thead>
         <tr>
             <th>{{ trans('content.name') }}</th>
-            <th>{{ trans('content.identifier') }}</th>
             <th>{{ trans('content.address') }}</th>
             <th>{{ trans('content.phone_no') }}</th>
             <th>{{ trans('content.actions') }}</th>
@@ -13,7 +12,6 @@
         @foreach($suppliers as $supplier)
             <tr>
                 <td>{{ $supplier->name }}</td>
-                <td>{{ $supplier->identifier }}</td>
                 <td>{{ $supplier->address }}</td>
                 <td>{{ $supplier->phone_no }}</td>
 

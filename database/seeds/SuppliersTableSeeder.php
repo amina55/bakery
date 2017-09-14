@@ -11,33 +11,12 @@ class SuppliersTableSeeder extends Seeder
      */
     public function run()
     {
-        Supplier::firstOrCreate([
-            'identifier' => str_random('5'),
-            'name' => str_random('10'),
-            'address' => 'xyz, city abc, india',
-            'phone_no' => '98877787868'
-        ]);
-
-        Supplier::firstOrCreate([
-            'identifier' => str_random('5'),
-            'name' => str_random('10'),
-            'address' => 'xyz, city abc, india',
-            'phone_no' => '98877787868'
-        ]);
-
-        Supplier::firstOrCreate([
-            'identifier' => str_random('5'),
-            'name' => str_random('10'),
-            'address' => 'xyz, city abc, india',
-            'phone_no' => '98877787868'
-        ]);
-
-        Supplier::firstOrCreate([
-            'identifier' => str_random('5'),
-            'name' => str_random('10'),
-            'address' => 'xyz, city abc, india',
-            'phone_no' => '98877787868'
-        ]);
-
+        for ($i = 0; $i < 5; $i++) {
+            Supplier::firstOrCreate([
+                'name' => 'supplier'.$i,
+                'address' => 'xyz, city abc, india',
+                'phone_no' => '98877787868'.$i,
+            ]);
+        }
     }
 }

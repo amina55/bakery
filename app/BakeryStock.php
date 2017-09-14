@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class BakeryStock extends Model
 {
     protected $guarded = ['id'];
 
-    public function unit()
+    public function product()
     {
-        return $this->belongsTo('App\Unit');
+        return $this->belongsTo('App\Product');
     }
 }

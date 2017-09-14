@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\RawItem;
-
+use App\Unit;
 class RawItemsTableSeeder extends Seeder
 {
     /**
@@ -15,31 +15,31 @@ class RawItemsTableSeeder extends Seeder
         RawItem::firstOrCreate([
             'name' => 'sugar',
             'description' => 'Sugar for baking',
-            'unit'  => 'kg'
+            'unit_id'  => Unit::getId('kg')
         ]);
 
         RawItem::firstOrCreate([
             'name' => 'pepsi',
             'description' => 'Drink',
-            'unit'  => 'litre'
+            'unit_id'  => Unit::getId('liter')
         ]);
 
         RawItem::firstOrCreate([
             'name' => 'baking_powder',
             'description' => 'Baking Powder for making cake',
-            'unit'  => 'kg'
+            'unit_id'  => Unit::getId('kg')
         ]);
 
         RawItem::firstOrCreate([
             'name' => 'cream',
             'description' => 'Cream for baking cake',
-            'unit'  => 'litre'
+            'unit_id'  => Unit::getId('liter')
         ]);
 
         RawItem::firstOrCreate([
             'name' => 'milk',
             'description' => 'Milk for baking cake',
-            'unit'  => 'kg'
+            'unit_id'  => Unit::getId('kg')
         ]);
     }
 }

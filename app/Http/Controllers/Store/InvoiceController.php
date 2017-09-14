@@ -19,22 +19,11 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        /*$suppliers = Supplier::where('status', 'active')->get();
-        $items = RawItem::where('status', 'active')->get();*/
-
         $supplierID = $request->get('supplier_id', 0);
         $invoiceDate = $request->get('invoice_date', 0);
-        $suppliers = Supplier::all();
-
-        $invoiceQuery = Invoice::where('total_amount', '>', 0);
-        if($invoiceDate) {
-            $invoiceQuery = $invoiceQuery->where('date', date('Y-m-d', strtotime($invoiceDate)));
-        }
-        if($supplierID) {
-            $invoiceQuery = $invoiceQuery->where('supplier_id', $supplierID);
-        }
-        $invoices = $invoiceQuery->get();
-        $items = RawItem::all();
+        $suppliers = Supplier::getSupppliers();
+        $invoices = Invoice::getInvoice($supplierID, $invoiceDate);
+        $items = RawItem::getRawItems();
 
         return view('store.invoice.index', ['invoices' => $invoices, 'suppliers' => $suppliers, 'items' => $items, 'supplierID' => $supplierID, 'invoiceDate' => $invoiceDate]);
     }
@@ -46,8 +35,8 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $suppliers = Supplier::all();
-        $items = RawItem::all();
+        $suppliers = Supplier::getSupppliers();
+        $items = RawItem::getRawItems();
         return view('store.invoice.create', ['invoice' => null, 'suppliers' => $suppliers, 'items' => $items]);
     }
 
@@ -66,6 +55,8 @@ class InvoiceController extends Controller
             'supplier_invoice_id' => $inputs['supplier_invoice_id'],
             'total_amount' => $inputs['total_amount'],
             'total_tax' => $inputs['total_tax'],
+            /*'cgst_tax' => $inputs['cgst_tax'],
+            'sgst_tax' => $inputs['cgst_tax'],*/
             'total_discount' => $inputs['total_discount'],
             'payable_amount' => $inputs['payable_amount'],
             'paid_amount' => $inputs['paid_amount'],
@@ -77,13 +68,14 @@ class InvoiceController extends Controller
         for($i = 1; $i <= $inputs['total_rows']; $i++) {
             if(!empty($inputs['raw_item'.$i]) && !empty($inputs['rate'.$i]) && !empty($inputs['quantity'.$i])) {
 
+                $itemId = $inputs['raw_item'.$i];
                 $price = $inputs['rate'.$i];
                 $quantity = $inputs['quantity'.$i];
                 $discount = !empty($inputs['quantity'.$i]) ? $inputs['quantity'.$i] : 0;
 
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
-                    'raw_item_id' => $inputs['raw_item'.$i],
+                    'raw_item_id' => $itemId,
                     'quantity' => $quantity,
                     'price' => $price,
                     'amount' => $quantity * $price,
@@ -91,20 +83,11 @@ class InvoiceController extends Controller
                     'discount_percentage' => 0,
                     'payable_amount' => $quantity * $price - $discount,
                 ]);
+
+                RawItem::increaseQuantity($itemId, $quantity);
             }
         }
         return redirect()->route($route);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Invoice $invoice)
-    {
-        //
     }
 
     /**
@@ -115,21 +98,9 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $suppliers = Supplier::all();
-        $items = RawItem::all();
+        $suppliers = Supplier::getSupppliers();
+        $items = RawItem::getRawItems();
         return view('store.invoice.create', ['invoice' => $invoice, 'suppliers' => $suppliers, 'items' => $items]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Invoice $invoice)
-    {
-        //
     }
 
     /**
@@ -142,13 +113,5 @@ class InvoiceController extends Controller
     {
         $invoice->delete();
         return redirect()->back();
-    }
-
-    public function search(Request $request)
-    {
-        $inputs = $request->all();
-        print_r($inputs);
-
-        return redirect()->route('invoice.index');
     }
 }

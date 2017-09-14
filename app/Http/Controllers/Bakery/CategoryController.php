@@ -49,8 +49,5 @@ class CategoryController extends Controller
     {
         $category->delete();
         return redirect()->route('category.index');
-
-        /*$category->status = 0;
-        $category->save();*/
     }
 }

@@ -26,7 +26,7 @@ class RawItemCreateRequest extends FormRequest
         return [
             'name' => 'bail|required|max:100|unique:raw_items',
             'description' => 'required|max:200',
-            'unit' => 'required|max:20',
+            'unit_id' => 'required',
             'stock' => 'required|numeric',
         ];
     }

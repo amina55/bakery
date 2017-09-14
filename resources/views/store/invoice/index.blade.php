@@ -38,7 +38,7 @@
                             <select id="supplier_id" name="supplier_id" class="form-control">
                                 <option value=""> All </option>
                                 @foreach($suppliers as $supplier)
-                                    <option {{ ($supplierID == $supplier->id) ? 'selected' : '' }} value="{{ $supplier->id }}">{{$supplier->identifier}}</option>
+                                    <option {{ ($supplierID == $supplier->id) ? 'selected' : '' }} value="{{ $supplier->id }}">{{$supplier->name}}</option>
                                 @endforeach
                             </select>
                         </div>

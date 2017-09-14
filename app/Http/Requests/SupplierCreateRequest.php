@@ -24,14 +24,12 @@ class SupplierCreateRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'bail|required|min:3|max:100',
             'address' => 'bail|required|min:3|max:200',
-            //'phone_no' => 'bail|required|numeric|size:9',
             'phone_no' => 'required|regex:/[0-9]{9}/'
         ];
 
         if($this->attributes->get('request_type') == 'create') {
-            $rules['identifier'] = 'bail|required|min:3|max:50|unique:suppliers';
+            $rules['name'] = 'bail|required|min:3|max:50|unique:suppliers';
         }
         return $rules;
     }

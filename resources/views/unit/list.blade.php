@@ -3,26 +3,23 @@
         <thead>
         <tr>
             <th> Name</th>
-            <th> Description </th>
+            <th> Short Key </th>
             <th>{{ trans('content.actions') }}</th>
         </tr>
         </thead>
         <tbody>
-        @foreach($categories as $category)
+        @foreach($units as $unit)
             <tr>
-                <td>{{ $category->name }}</td>
-                <td>{{ $category->description }}</td>
+                <td>{{ $unit->name }}</td>
+                <td>{{ $unit->short_key }}</td>
 
                 <td class="centralized-text">
-                    <a  class="no-text-decoration edit_category" title="Edit Category" data-toggle="modal" data-target="#editCategoryModal"
-                       data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{ $category->description }}">
+                    <a  class="no-text-decoration edit_unit" title="Edit unit" data-toggle="modal" data-target="#editunitModal"
+                       data-id="{{ $unit->id }}" data-name="{{ $unit->name }}" data-key="{{ $unit->short_key }}">
                         <i class="fa fa-lg fa-pencil"></i>
                     </a>
-                    <a href="{{ route('category.destroy', [$category->id]) }}" class="no-text-decoration" title="Delete Category">
+                    <a href="{{ route('unit.destroy', [$unit->id]) }}" class="no-text-decoration" title="Delete unit">
                         <i class="fa fa-lg fa-trash"></i>
-                    </a>
-                    <a href="{{ route('product.index', [$category->id]) }}" class="no-text-decoration" title="Products of this Category">
-                        <i class="fa fa-lg fa-list"></i>
                     </a>
                 </td>
             </tr>
@@ -31,21 +28,22 @@
     </table>
 </div>
 
-<div id="editCategoryModal" class="modal fade" role="dialog">
+<div id="editunitModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-        <form class="form-horizontal" action="{{ route('category.store') }}" method="post">
+        <form class="form-horizontal" action="{{ route('unit.store') }}" method="post">
         {{ csrf_field() }}
 
         <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Edit Category</h4>
+                    <h4 class="modal-title">Edit unit</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <input type="hidden" name="id" id="edit_id">
+
                         <label for="edit_name" class="col-md-4 control-label">Name</label>
 
                         <div class="col-md-6">
@@ -54,10 +52,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="edit_description" class="col-md-4 control-label">Description</label>
+                        <label for="edit_short_key" class="col-md-4 control-label">Short Key</label>
 
                         <div class="col-md-6">
-                            <textarea rows="3" id="edit_description" class="form-control" name="description" required></textarea>
+                            <input type="text" id="edit_short_key" class="form-control" name="short_key" required>
                         </div>
                     </div>
                 </div>
@@ -71,14 +69,14 @@
 </div>
 
 <script>
-    $('.edit_category').click(function () {
+    $('.edit_unit').click(function () {
 
         var id = $(this).data('id');
         var name = $(this).data('name');
-        var description = $(this).data('description');
+        var short_key = $(this).data('key');
 
         $('#edit_name').val(name);
-        $('#edit_description').val(description);
+        $('#edit_short_key').val(short_key);
         $('#edit_id').val(id);
     });
 </script>

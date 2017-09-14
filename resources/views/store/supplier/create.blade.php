@@ -13,32 +13,18 @@
                             {{ csrf_field() }}
 
                             <input type="hidden" name="request_type" value="{{ ($supplier) ? 'edit' : 'create' }}">
-                            <input type="hidden" name="unique_identifier" value="{{ ($supplier) ? $supplier->identifier : '' }}">
+                            <input type="hidden" name="unique_identifier" value="{{ ($supplier) ? $supplier->name : '' }}">
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                 <label for="name" class="col-md-4 control-label">Name</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') ? old('name') : (($supplier) ? $supplier->name : '') }}" required autofocus>
+                                    <input id="name" type="text" class="form-control" name="name" {{ ($supplier) ? 'disabled' : '' }}
+                                    value="{{ old('name') ? old('name') : (($supplier) ? $supplier->name : '') }}" required autofocus>
 
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('name') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('identifier') ? ' has-error' : '' }}">
-                                <label for="identifier" class="col-md-4 control-label">Identifier</label>
-
-                                <div class="col-md-6">
-                                    <input id="identifier" type="text" class="form-control" name="identifier" {{ ($supplier) ? 'disabled' : ''}}
-                                           value="{{ old('identifier') ? old('identifier') : (($supplier) ? $supplier->identifier : '') }}" required>
-
-                                    @if ($errors->has('identifier'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('identifier') }}</strong>
                                         </span>
                                     @endif
                                 </div>

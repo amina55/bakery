@@ -5,6 +5,7 @@
             <th>{{ trans('content.raw_item') }}</th>
             <th>{{ trans('content.description') }}</th>
             <th>{{ trans('content.stock') }}</th>
+            <th> Unit </th>
             <th>{{ trans('content.actions') }}</th>
         </tr>
         </thead>
@@ -14,6 +15,7 @@
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->description }}</td>
                 <td>{{ $item->stock }}</td>
+                <td>{{ $item->unit->short_key }}</td>
 
                 <td class="centralized-text">
                     <a href="{{ route('item.edit', [$item->id]) }}" class="no-text-decoration" title="{{ trans('content.edit_item') }}">

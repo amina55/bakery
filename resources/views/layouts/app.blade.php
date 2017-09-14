@@ -59,14 +59,19 @@
                                 <li><a href="{{ route('item.index') }}">Raw Item</a></li>
                                 <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
                                 <li><a href="{{ route('supplier.index') }}">Supplier</a></li>
+
                             @elseif(Auth::user()->type == 'kitchen_manager')
                                 {{--<li><a href="{{ route('item.index') }}">Raw Item</a></li>
                                 <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
                                 <li><a href="{{ route('supplier.index') }}">Supplier</a></li>--}}
+
                             @elseif(Auth::user()->type == 'bakery_manager')
                                 <li><a href="{{ route('category.index') }}">Category</a></li>
-                                <li><a href="{{ route('product.index') }}">Products</a></li>
+                                <li><a href="{{ route('bakery_stock.index') }}">Stock</a></li>
+                                <li><a href="{{ route('bill.index') }}">Bills</a></li>
+
                             @endif
+                                <li><a href="{{ route('unit.index') }}">Units</a></li>
                         @endif
                     </ul>
 

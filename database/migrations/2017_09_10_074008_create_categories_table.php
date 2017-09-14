@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->string('name', 50)->unique();
             $table->string('description', 200);
+            $table->boolean('status')->default(1);
 
             $table->timestamps();
         });

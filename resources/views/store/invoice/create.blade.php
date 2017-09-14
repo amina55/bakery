@@ -19,16 +19,16 @@
             $('.add_new_row').click(function () {
 
                 var appendChild = '<tr><td><select id="raw_item'+total_rows+'" name="raw_item'+total_rows+'" class="form-control">'+
-                    '<option value="">--- select an item ---</option> ' +
+                    '<option value="">--- select an item ---</option> ';
 
-                    '<option value="1">sugar</option> <option value="2">pepsi</option>'+
-                    '<option value="3">baking_powder</option> <option value="4">cream</option> <option value="5">milk</option>'+
-                    '<option value="6">salt</option> <option value="9">baking soda</option> <option value="10">sad</option> ' +
-                    '</select></td>'+
+                for (var i = 0; i < raw_items.length; i++) {
+                    appendChild += '<option value="'+ raw_items[i].id +'">'+ raw_items[i].name +'</option>';
+                }
 
-                    '<td> <label id="unit'+total_rows+'"> unit</label> </td> <td> <input id="quantity'+total_rows+'" name="quantity'+total_rows+'"  min="0" class="form-control" type="number"> </td>'+
-                    '<td> <input id="rate'+total_rows+'" name="rate'+total_rows+'"  min="0" class="form-control" type="number"> </td> '+
-                    '<td> <input id="discount'+total_rows+'" name="discount'+total_rows+'" min="0" class="form-control" type="number"> </td> ' +
+                appendChild += '</select></td><td> <label id="unit'+total_rows+'"> unit</label> </td> ' +
+                    '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="quantity'+total_rows+'" name="quantity'+total_rows+'"  min="0" class="form-control" type="number"> </td>'+
+                    '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="rate'+total_rows+'" name="rate'+total_rows+'"  min="0" class="form-control" type="number"> </td> '+
+                    '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="discount'+total_rows+'" name="discount'+total_rows+'" min="0" class="form-control" type="number"> </td> ' +
                     '<td> <label id="amount'+total_rows+'"></label> </td>' +
                     '<td>remove </td></tr>';
                 $('.invoice_items').append(appendChild);
@@ -50,7 +50,7 @@
 
                     if(item && quantity && rate) {
                         var amount = quantity * rate - discount;
-                        $('#amount'+i).html(amount);
+                        $('#amount'+i).html(amount.toFixed(2));
                         total_amount = total_amount + amount;
                     } else {
                         if(item) {
@@ -60,7 +60,7 @@
                     }
                 }
                 if(status) {
-                    $('.total_amount').val(total_amount);
+                    $('.total_amount').val(total_amount.toFixed(2));
                     calculateTax();
                     calculatePayable();
                 }
@@ -76,19 +76,24 @@
             function calculatePayable() {
                 var total_discount = $('#total_discount').val();
                 payable_amount = ( total_amount + total_tax ) - ( total_discount / 100 ) * total_amount;
-                $('.payable_amount').val(payable_amount);
-                $('.remaining').val(payable_amount);
+                $('.payable_amount').val(payable_amount.toFixed(2));
+                $('.remaining').val(payable_amount.toFixed(2));
 
             }
             function calculateTax() {
+
                 total_tax =  0.18 * total_amount;
-                $('.total_tax').val(total_tax);
+                $('.total_tax').val(total_tax.toFixed(2));
+
+                var cgst_tax =  0.09 * total_amount;
+                $('.cgst_tax').val(cgst_tax.toFixed(2));
+                $('.sgst_tax').val(cgst_tax.toFixed(2));
             }
             
             function calculateRemaining() {
                 var paid_amount = $('#paid_amount').val();
                 var remaining = payable_amount - paid_amount;
-                $('.remaining').val(remaining);
+                $('.remaining').val(remaining.toFixed(2));
             }
         });
     </script>
@@ -103,6 +108,7 @@
                 <input type="hidden" name="total_rows" id="total_rows" value="1">
                 <input type="hidden" name="total_amount" class="total_amount">
                 <input type="hidden" name="total_tax" class="total_tax">
+                <input type="hidden" name="cgst_tax" class="cgst_tax">
                 <input type="hidden" name="payable_amount" class="payable_amount">
                 <input type="hidden" name="remaining" class="remaining">
 
@@ -163,7 +169,7 @@
                             <th>Unit</th>
                             <th>Quantity</th>
                             <th>Rate</th>
-                            <th>Discount</th>
+                            <th>Discount ( Rs. )</th>
                             <th>Amount</th>
                             <th>Actions</th>
                         </tr>
@@ -182,13 +188,13 @@
                                 <label id="unit1"> unit</label>
                             </td>
                             <td>
-                                <input id="quantity1" name="quantity1" type="number" min="0" class="form-control" required>
+                                <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="quantity1" name="quantity1" type="number" min="0" class="form-control" required>
                             </td>
                             <td>
-                                <input id="rate1" name="rate1" type="number" min="0" class="form-control" required>
+                                <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="rate1" name="rate1" type="number" min="0" class="form-control" required>
                             </td>
                             <td>
-                                <input id="discount1" name="discount1" type="number" min="0" class="form-control">
+                                <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="discount1" name="discount1" type="number" min="0" class="form-control">
                             </td>
                             <td>
                                 <label id="amount1"></label>
@@ -207,41 +213,76 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="col-sm-2 col-sm-offset-3"> <label> Total Amount </label> </div>
-                        <div class="col-sm-2"> <input type="text" class="total_amount form-control" value="0" disabled> </div>
+
+                    <div class="form-group">
+                        <label for="total_amount" class="col-md-4 control-label"> Total Amount </label>
+
+                        <div class="col-md-3">
+                            <input class="total_amount form-control" name="total_amount" required value="{{ old('total_amount') ? old('total_amount') : 0 }}" disabled>
+                        </div>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="col-sm-2 col-sm-offset-3"> <label> Total Tax (18 %) </label> </div>
-                        <div class="col-sm-2"> <input type="text" class="total_tax form-control" value="0" disabled> </div>
+                    <div class="form-group">
+                        <label for="total_tax" class="col-md-4 control-label"> Total Tax (18%)  </label>
+
+                        <div class="col-md-3">
+                            <input class="total_tax form-control" name="total_tax" required value="{{ old('total_tax') ? old('total_tax') : 0 }}" disabled>
+                        </div>
+                        <label for="cgst_tax" class="col-md-1 control-label"> CGST(9%)  </label>
+                        <div class="col-md-1">
+                            <input class="cgst_tax form-control" name="cgst_tax" required value="{{ old('cgst_tax') ? old('cgst_tax') : 0 }}" disabled>
+                        </div>
+                        <label for="sgst_tax" class="col-md-1 control-label"> SGST(9%)  </label>
+                        <div class="col-md-1">
+                            <input class="sgst_tax form-control" name="sgst_tax" required value="{{ old('sgst_tax') ? old('sgst_tax') : 0 }}" disabled>
+                        </div>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="col-sm-2 col-sm-offset-3"> <label> Discount (in %) </label> </div>
-                        <div class="col-sm-2"> <input id="total_discount" name="total_discount" class="form-control" type="number" value="0" onblur="calculatePayable()"> </div>
+                    <div class="form-group">
+                        <label for="total_discount" class="col-md-4 control-label"> Total Discount ( % ) </label>
+
+                        <div class="col-md-3">
+                            <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0" id="total_discount" name="total_discount" class="form-control" type="number" value="{{ old('total_discount') ? old('total_discount') : 0 }}" onblur="calculatePayable()">
+                            @if ($errors->has('total_discount'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('total_discount') }}</strong>
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="col-sm-2 col-sm-offset-3"> <label> Payable Amount </label> </div>
-                        <div class="col-sm-2"> <input type="text" class="payable_amount form-control" value="0" disabled> </div>
+                    <div class="form-group">
+                        <label for="payable_amount" class="col-md-4 control-label"> Payable Amount </label>
+
+                        <div class="col-md-3">
+                            <input class="payable_amount form-control" name="payable_amount" required value="{{ old('payable_amount') ? old('payable_amount') : 0 }}" disabled>
+                        </div>
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="col-sm-2 col-sm-offset-3"> <label> Paid Amount </label> </div>
-                        <div class="col-sm-2"> <input id="paid_amount" name="paid_amount" class="form-control" type="number" value="0" onblur="calculateRemaining()"> </div>
-                    </div>
+                    <div class="form-group">
+                        <label for="paid_amount" class="col-md-4 control-label"> Paid Amount </label>
 
-                    <div class="col-sm-12">
-                        <div class="col-sm-2 col-sm-offset-3"> <label> Remaining Amount </label> </div>
-                        <div class="col-sm-2"> <input type="text" class="remaining form-control" value="0" disabled> </div>
+                        <div class="col-md-3">
+                            <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0" id="paid_amount" name="paid_amount" class="form-control" type="number" required value="{{ old('paid_amount') ? old('paid_amount') : 0 }}" onblur="calculateRemaining()"> </div>
+                            @if ($errors->has('paid_amount'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('paid_amount') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                    <div class="form-group">
+                        <label for="remaining" class="col-md-4 control-label"> Remaining Amount </label>
+
+                        <div class="col-md-3">
+                            <input class="remaining form-control" name="remaining" required value="{{ old('remaining') ? old('remaining') : 0 }}" disabled>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row pull-right">
                     <input type="submit" class="btn btn-primary" value="Save Invoice">
                     <input type="button" class="btn btn-default" value="Cancel">
-
                 </div>
             </div>
         </div>

@@ -3,21 +3,24 @@
         <thead>
         <tr>
             <th> Invoice ID </th>
-            <th> Supplier Invoice ID </th>
             <th> Payable Amount </th>
-            <th>Paid Amount</th>
-            <th>Remaining Amount</th>
-            <th>{{ trans('content.actions') }}</th>
+            <th> Paid Amount </th>
+            <th> Remaining Amount </th>
+            <th> Supplier </th>
+            <th> Date </th>
+            <th> {{ trans('content.actions') }} </th>
         </tr>
         </thead>
         <tbody>
         @foreach($invoices as $invoice)
             <tr>
                 <td>{{ $invoice->id }}</td>
-                <td>{{ $invoice->supplier_invoice_id }}</td>
                 <td>{{ $invoice->payable_amount }}</td>
                 <td>{{ $invoice->paid_amount }}</td>
                 <td>{{ $invoice->remaining }}</td>
+                <td>{{ $invoice->supplier->name }}</td>
+                <td>{{ date('d-m-Y', strtotime($invoice->date)) }}</td>
+
 
                 <td class="centralized-text">
                     <a {{--href="{{ route('invoice.edit', [$invoice->id]) }}"--}} class="no-text-decoration" title="{{ trans('content.edit_item') }}">

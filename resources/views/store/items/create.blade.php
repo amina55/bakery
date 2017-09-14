@@ -45,26 +45,31 @@
                                 <label for="stock" class="col-md-4 control-label">Stock</label>
 
                                 <div class="col-md-6">
-                                    <input id="stock" type="number" class="form-control" name="stock" min="0" value="{{ old('stock') ? old('stock') : (($item) ? $item->stock : '') }}" {{ ($item) ? 'disabled' : '' }} required>
+                                    <input id="stock" type="number" class="form-control" name="stock" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0" value="{{ old('stock') ? old('stock') : (($item) ? $item->stock : '') }}" {{ ($item) ? 'disabled' : '' }} required>
 
                                     @if ($errors->has('stock'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('stock') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('stock') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
                             
-                            <div class="form-group{{ $errors->has('unit') ? ' has-error' : '' }}">
-                                <label for="unit" class="col-md-4 control-label">Unit</label>
+                            <div class="form-group{{ $errors->has('unit_id') ? ' has-error' : '' }}">
+                                <label for="unit_id" class="col-md-4 control-label">Unit</label>
 
+                                <?php $unitOld =  old('unit_id') ? old('unit_id') : (($item) ? $item->unit_id : '')?>
                                 <div class="col-md-6">
-                                    <input id="unit" type="text" class="form-control" name="unit" value="{{ old('unit') ? old('unit') : (($item) ? $item->unit : '') }}" required>
-
-                                    @if ($errors->has('unit'))
+                                    <select id="unit_id" class="form-control" name="unit_id" required>
+                                        <option value=""> --- select a unit --- </option>
+                                        @foreach($units as $unit)
+                                            <option {{ ($unitOld == $unit->id) ? 'selected' : '' }} value="{{ $unit->id }}"> {{ $unit->name }} ( {{ $unit->short_key }} )</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('unit_id'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('unit') }}</strong>
-                                    </span>
+                                            <strong>{{ $errors->first('unit_id') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>

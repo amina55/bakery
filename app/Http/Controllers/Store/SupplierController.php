@@ -16,7 +16,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::where('status', 1)->get();
         return view('store.supplier.index', ['suppliers' => $suppliers]);
     }
 
@@ -40,8 +40,7 @@ class SupplierController extends Controller
     {
         $route = 'supplier.index';
         Supplier::updateOrCreate(
-            ['identifier' => $request->get('identifier', $request->get('unique_identifier'))], [
-            'name' => $request->get('name'),
+            ['name' => $request->get('name', $request->get('unique_identifier'))], [
             'address' => $request->get('address'),
             'phone_no' => $request->get('phone_no'),
         ]);
@@ -49,17 +48,6 @@ class SupplierController extends Controller
             $route = 'supplier.create';
         }
         return redirect()->route($route);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Supplier $supplier)
-    {
-        //
     }
 
     /**
@@ -73,17 +61,6 @@ class SupplierController extends Controller
         return view('store.supplier.create', ['supplier' => $supplier]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Supplier $supplier)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -93,6 +70,8 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $supplier->status = 0;
+        $supplier->save();
+        return redirect()->route('supplier.index');
     }
 }

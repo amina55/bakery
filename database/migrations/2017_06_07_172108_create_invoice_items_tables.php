@@ -17,12 +17,13 @@ class CreateInvoiceItemsTables extends Migration
             $table->increments('id');
             $table->unsignedInteger('invoice_id');
             $table->unsignedInteger('raw_item_id');
-            $table->unsignedInteger('price');
-            $table->unsignedInteger('quantity');
-            $table->unsignedInteger('amount');
-            $table->integer('discount_percentage');
-            $table->integer('discount_amount');
-            $table->unsignedInteger('payable_amount');
+            $table->float('price');
+            $table->float('quantity');
+            $table->float('amount');
+            $table->float('discount_percentage');
+            $table->float('discount_amount');
+            $table->float('payable_amount');
+            $table->boolean('status')->default(1);
             $table->timestamps();
 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
