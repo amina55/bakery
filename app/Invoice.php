@@ -15,7 +15,7 @@ class Invoice extends Model
 
     public static function getInvoice($supplierID = '', $invoiceDate = '')
     {
-        $invoiceQuery = Invoice::where('status', 1)->with('supplier');
+        $invoiceQuery = self::where('status', 1)->with('supplier');
         if($invoiceDate) {
             $invoiceQuery = $invoiceQuery->where('date', date('Y-m-d', strtotime($invoiceDate)));
         }

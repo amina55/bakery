@@ -8,37 +8,43 @@
             var total_amount = 0;
             var total_tax = 0;
             var payable_amount = 0;
-            var raw_items = $('#raw_items').val();
-            raw_items = JSON.parse(raw_items);
+            var stock_items = $('#stock_items').val();
+            stock_items = JSON.parse(stock_items);
             var units = [];
+            var rates = [];
 
-            for(var j=0; j < raw_items.length; j++) {
-                units[raw_items[j].id] = raw_items[j].unit;
+            for(var j=0; j < stock_items.length; j++) {
+                units[stock_items[j].id] = stock_items[j].multiplier +' '+ stock_items[j].product.unit.name;
+                rates[stock_items[j].id] = stock_items[j].price;
             }
 
-            $('body').on('change', '[id^="raw_item"]', function(){
-                var raw = $(this).val();
+            $('body').on('change', '[id^="stock_item"]', function(){
+                var product = $(this).val();
                 var id = $(this).attr('id');
-                var unitId = id.replace('raw_item', 'unit');
-                $('#'+unitId).html(units[raw]);
+
+                var unitId = id.replace('stock_item', 'unit');
+                $('#'+unitId).html(units[product]);
+
+                var rateId = id.replace('stock_item', 'rate');
+                $('#'+rateId).html(rates[product]);
             });
 
             $('.add_new_row').click(function () {
 
-                var appendChild = '<tr><td><select id="raw_item'+total_rows+'" name="raw_item'+total_rows+'" class="form-control">'+
+                var appendChild = '<tr><td><select id="stock_item'+total_rows+'" name="stock_item'+total_rows+'" class="form-control">'+
                     '<option value="">--- select an item ---</option> ';
 
-                for (var i = 0; i < raw_items.length; i++) {
-                    appendChild += '<option value="'+ raw_items[i].id +'">'+ raw_items[i].name +'</option>';
+                for (var i = 0; i < stock_items.length; i++) {
+                    appendChild += '<option value="'+ stock_items[i].id +'">'+ stock_items[i].product.name +'</option>';
                 }
 
-                appendChild += '</select></td><td> <label id="unit'+total_rows+'"></label> </td> ' +
+                appendChild += '</select></td><td> <label id="unit'+total_rows+'"> unit</label> </td> ' +
                     '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="quantity'+total_rows+'" name="quantity'+total_rows+'"  min="0" class="form-control" type="number"> </td>'+
-                    '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="rate'+total_rows+'" name="rate'+total_rows+'"  min="0" class="form-control" type="number"> </td> '+
+                    '<td> <label id="rate'+total_rows+'"></label> </td> '+
                     '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="discount'+total_rows+'" name="discount'+total_rows+'" min="0" class="form-control" type="number"> </td> ' +
                     '<td> <label id="amount'+total_rows+'"></label> </td>' +
                     '<td>remove </td></tr>';
-                $('.invoice_items').append(appendChild);
+                $('.bill_items').append(appendChild);
 
                 total_rows++;
                 $('#total_rows').val(total_rows);
@@ -50,9 +56,9 @@
 
                 for(var i = 1; i < total_rows; i++) {
 
-                    var item = $('#raw_item'+i).val();
+                    var item = $('#stock_item'+i).val();
                     var quantity = $('#quantity'+i).val();
-                    var rate = $('#rate'+i).val();
+                    var rate = $('#rate'+i).html();
                     var discount = $('#discount'+i).val();
 
                     if(item && quantity && rate) {
@@ -62,7 +68,7 @@
                     } else {
                         if(item) {
                             status = false;
-                            $('.error-show').html('<div class="alert alert-danger">Please fill all items quantity and rate</div>');
+                            $('.error-show').html('<div class="alert alert-danger">Please fill all items quantity</div>');
                         }
                     }
                 }
@@ -86,7 +92,6 @@
                 var total_discount = $('#total_discount').val();
                 payable_amount = ( total_amount + total_tax ) - ( total_discount / 100 ) * total_amount;
                 $('.payable_amount').val(payable_amount.toFixed(2));
-
             }
             function calculateTax() {
 
@@ -94,8 +99,10 @@
                 $('.total_tax').val(total_tax.toFixed(2));
 
                 var cgst_tax =  0.09 * total_amount;
+                var sgst_tax =  0.09 * total_amount;
+
                 $('.cgst_tax').val(cgst_tax.toFixed(2));
-                $('.sgst_tax').val(cgst_tax.toFixed(2));
+                $('.sgst_tax').val(sgst_tax.toFixed(2));
             }
             
             function calculateRemaining() {
@@ -106,64 +113,46 @@
         });
     </script>
 
-    <form class="form-horizontal" action=" {{ route('invoice.store') }}" method="post">
+    <form class="form-horizontal" action=" {{ route('bill.store') }}" method="post">
         {{ csrf_field() }}
 
         <div class="container">
             <div class="row">
                 <div class="error-show"></div>
-                <input type="hidden" id="raw_items" name="raw_items" value="{{ $items }}">
+                <input type="hidden" id="stock_items" name="stock_items" value="{{ $stocks }}">
                 <input type="hidden" name="total_rows" id="total_rows" value="1">
                 <input type="hidden" name="total_amount" class="total_amount">
                 <input type="hidden" name="total_tax" class="total_tax">
                 <input type="hidden" name="cgst_tax" class="cgst_tax">
+                <input type="hidden" name="sgst_tax" class="sgst_tax">
+
                 <input type="hidden" name="payable_amount" class="payable_amount">
                 <input type="hidden" name="remaining" class="remaining">
 
 
-                <div class="form-group{{ $errors->has('supplier_invoice_id') ? ' has-error' : '' }}">
-                    <label for="supplier_invoice_id" class="col-md-4 control-label">Supplier Invoice ID</label>
+                <div class="form-group{{ $errors->has('customer_name') ? ' has-error' : '' }}">
+                    <label for="customer_name" class="col-md-4 control-label">Customer Name</label>
 
                     <div class="col-md-3">
-                        <input id="supplier_invoice_id" class="form-control" name="supplier_invoice_id" required value="{{ old('supplier_invoice_id') ? old('supplier_invoice_id') : '' }}">
 
-                        @if ($errors->has('supplier_invoice_id'))
+                        <input placeholder="Customer Name" class="form-control" type="text" name="customer_name">
+                        @if ($errors->has('customer_name'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('supplier_invoice_id') }}</strong>
+                                <strong>{{ $errors->first('customer_name') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('supplier_id') ? ' has-error' : '' }}">
-                    <label for="supplier_id" class="col-md-4 control-label">Supplier</label>
+                <div class="form-group{{ $errors->has('care_of') ? ' has-error' : '' }}">
+                    <label for="care_of" class="col-md-4 control-label">Care of.</label>
 
                     <div class="col-md-3">
 
-                        <select id="supplier_id" name="supplier_id" class="form-control">
-                            <option  value="">--- select a supplier ---</option>
-                            @foreach($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">{{$supplier->name}}</option>
-                            @endforeach
-                        </select>
-
-                        @if ($errors->has('supplier_id'))
+                        <input placeholder="Customer Care Of." class="form-control" type="text" name="care_of">
+                        @if ($errors->has('care_of'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('supplier_id') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group{{ $errors->has('invoice_date') ? ' has-error' : '' }}">
-                    <label for="invoice_date" class="col-md-4 control-label">Invoice Date</label>
-
-                    <div class="col-md-3">
-
-                        <input placeholder="Invoice Date" class="date-format form-control" type="text" name="invoice_date" required>
-                        @if ($errors->has('invoice_date'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('invoice_date') }}</strong>
+                                <strong>{{ $errors->first('care_of') }}</strong>
                             </span>
                         @endif
                     </div>
@@ -173,7 +162,7 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Raw Items</th>
+                            <th>Products</th>
                             <th>Unit</th>
                             <th>Quantity</th>
                             <th>Rate</th>
@@ -182,13 +171,13 @@
                             <th>Actions</th>
                         </tr>
                         </thead>
-                        <tbody class="invoice_items">
+                        <tbody class="bill_items">
                         <tr>
                             <td>
-                                <select id="raw_item1" name="raw_item1" class="form-control" required>
+                                <select id="stock_item1" name="stock_item1" class="form-control" required>
                                     <option  value="">--- select an item ---</option>
-                                    @foreach($items as $item)
-                                        <option value="{{ $item->id }}">{{$item->name}}</option>
+                                    @foreach($stocks as $stock)
+                                        <option value="{{ $stock->id }}">{{$stock->product->name}}</option>
                                     @endforeach
                                 </select>
                             </td>
@@ -199,7 +188,7 @@
                                 <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="quantity1" name="quantity1" type="number" min="0" class="form-control" required>
                             </td>
                             <td>
-                                <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="rate1" name="rate1" type="number" min="0" class="form-control" required>
+                                <label id="rate1"></label>
                             </td>
                             <td>
                                 <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="discount1" name="discount1" type="number" min="0" class="form-control">
@@ -238,11 +227,11 @@
                         </div>
                         <label for="cgst_tax" class="col-md-1 control-label"> CGST(9%)  </label>
                         <div class="col-md-1">
-                            <input class="cgst_tax form-control" name="cgst_tax" required value="{{ old('cgst_tax') ? old('cgst_tax') : 0 }}" disabled>
+                            <input class="cgst_tax form-control" required value="{{ old('cgst_tax') ? old('cgst_tax') : 0 }}" disabled>
                         </div>
                         <label for="sgst_tax" class="col-md-1 control-label"> SGST(9%)  </label>
                         <div class="col-md-1">
-                            <input class="sgst_tax form-control" name="sgst_tax" required value="{{ old('sgst_tax') ? old('sgst_tax') : 0 }}" disabled>
+                            <input class="sgst_tax form-control" required value="{{ old('sgst_tax') ? old('sgst_tax') : 0 }}" disabled>
                         </div>
                     </div>
 
@@ -289,7 +278,7 @@
                 </div>
 
                 <div class="row pull-right">
-                    <input type="submit" class="btn btn-primary" value="Save Invoice">
+                    <input type="submit" class="btn btn-primary" value="Save bill">
                     <input type="button" class="btn btn-default" value="Cancel">
                 </div>
             </div>

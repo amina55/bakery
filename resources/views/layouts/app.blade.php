@@ -69,6 +69,8 @@
                                 <li><a href="{{ route('category.index') }}">Category</a></li>
                                 <li><a href="{{ route('bakery_stock.index') }}">Stock</a></li>
                                 <li><a href="{{ route('bill.index') }}">Bills</a></li>
+                                <li><a href="{{ route('bakery_request.index') }}">Request</a></li>
+
 
                             @endif
                                 <li><a href="{{ route('unit.index') }}">Units</a></li>

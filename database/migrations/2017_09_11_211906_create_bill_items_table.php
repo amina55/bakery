@@ -21,6 +21,9 @@ class CreateBillItemsTable extends Migration
             $table->float('rate');
             $table->float('quantity');
             $table->float('total_amount');
+            $table->float('discount_percentage');
+            $table->float('discount_amount');
+            $table->float('payable_amount');
             $table->boolean('status')->default(1);
             $table->timestamps();
 

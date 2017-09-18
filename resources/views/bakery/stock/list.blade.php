@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped data-tables">
+    <table class="table data-tables">
         <thead>
         <tr>
             <th> Name</th>
@@ -11,7 +11,8 @@
         </thead>
         <tbody>
         @foreach($stocks as $stock)
-            <tr>
+            <?php $class = (($stock->quantity > 5) ? (($stock->quantity < 20) ? 'bg-warning' : '') : 'bg-danger') ?>
+            <tr class="{{ $class }}">
                 <td>{{ $stock->product->name }}</td>
                 <td>{{ $stock->quantity }}</td>
                 <td>{{ $stock->price }}</td>
