@@ -36,7 +36,7 @@
                                 <select id="stock_id" name="stock_id" class="form-control" required>
                                     <option value=""> --- select a product --- </option>
                                     @foreach($stocks as $stock)
-                                        <option value="{{ $stock->id }}"> {{ $stock ->product->name }} ( {{ $stock->multiplier }} {{ $stock->product->unit->name }} )</option>
+                                        <option value="{{ $stock->id }}"> {{ $stock ->product->name }} ( {{ $stock->multiplier }} {{ ($stock->product->unit) ? $stock->product->unit->name : '' }} )</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('stock_id'))
