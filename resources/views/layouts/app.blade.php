@@ -61,16 +61,15 @@
                                 <li><a href="{{ route('supplier.index') }}">Supplier</a></li>
 
                             @elseif(Auth::user()->type == 'kitchen_manager')
-                                {{--<li><a href="{{ route('item.index') }}">Raw Item</a></li>
-                                <li><a href="{{ route('invoice.index') }}">Invoice</a></li>
-                                <li><a href="{{ route('supplier.index') }}">Supplier</a></li>--}}
+                                <li><a href="{{ route('kitchen_stock.index') }}">Stock</a></li>
+                                <li><a href="{{ route('bakery_req.list') }}">Bakery's Request</a></li>
+                                {{--<li><a href="{{ route('kitchen_request.index') }}">Request</a></li>--}}
 
                             @elseif(Auth::user()->type == 'bakery_manager')
                                 <li><a href="{{ route('category.index') }}">Category</a></li>
                                 <li><a href="{{ route('bakery_stock.index') }}">Stock</a></li>
                                 <li><a href="{{ route('bill.index') }}">Bills</a></li>
                                 <li><a href="{{ route('bakery_request.index') }}">Request</a></li>
-
 
                             @endif
                                 <li><a href="{{ route('unit.index') }}">Units</a></li>
@@ -80,7 +79,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @if (Auth::guest())
+                            @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else

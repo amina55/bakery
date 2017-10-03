@@ -63,8 +63,8 @@
                             </select>
                             @if ($errors->has('stock_id'))
                                 <span class="help-block">
-                                        <strong>{{ $errors->first('stock_id') }}</strong>
-                                    </span>
+                                    <strong>{{ $errors->first('stock_id') }}</strong>
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -76,8 +76,8 @@
                             <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0.01" id="edit_quantity" class="form-control" name="quantity" value="{{ old('quantity') ? old('quantity') : ''}}" required>
                             @if ($errors->has('quantity'))
                                 <span class="help-block">
-                                        <strong>{{ $errors->first('quantity') }}</strong>
-                                    </span>
+                                    <strong>{{ $errors->first('quantity') }}</strong>
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -89,8 +89,8 @@
                             <input type="text" id="edit_demand_date" placeholder="Demand Date" class="date-from-now form-control" name="demand_date" value="{{ old('demand_date') ? old('demand_date') : ''}}" required>
                             @if ($errors->has('demand_date'))
                                 <span class="help-block">
-                                        <strong>{{ $errors->first('demand_date') }}</strong>
-                                    </span>
+                                    <strong>{{ $errors->first('demand_date') }}</strong>
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -106,8 +106,8 @@
                         </select>
                         @if ($errors->has('request_to'))
                             <span class="help-block">
-                                    <strong>{{ $errors->first('request_to') }}</strong>
-                                </span>
+                                <strong>{{ $errors->first('request_to') }}</strong>
+                            </span>
                         @endif
                     </div>
                 </div>

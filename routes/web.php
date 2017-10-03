@@ -66,10 +66,27 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::group(['namespace' => 'Kitchen', 'middleware' => 'role:kitchen_manager', 'prefix' => 'kitchen'], function (){
 
-        Route::group(['prefix' => 'kitchen_item'], function (){
-            Route::get('destroy/{kitchen_item}', 'RawItemController@destroy')->name('kitchen_item.destroy');
-        });
-        Route::resource('kitchen_item', 'RawItemController', ['except' => ['show', 'destroy']]);
+        /* ---- Stock ----*/
+
+        Route::get('stock', 'StockController@index')->name('kitchen_stock.index');
+        Route::post('add', 'StockController@addQuantity')->name('kitchen_stock.add_quantity');
+        Route::post('stock', 'StockController@store')->name('kitchen_stock.store');
+        Route::get('stock/destroy/{stock}', 'StockController@destroy')->name('kitchen_stock.destroy');
+
+
+        /* ---- Kitchen's Request ----*/
+
+        Route::get('request', 'RequestController@index')->name('kitchen_request.index');
+        Route::post('request', 'RequestController@store')->name('kitchen_request.store');
+        Route::get('request/destroy/{kitchen_request}', 'RequestController@destroy')->name('kitchen_request.destroy');
+
+
+        /* ---- Bakery's Request ----*/
+
+        Route::get('request', 'RequestController@listBakeryRequests')->name('bakery_req.list');
+        Route::post('request', 'RequestController@approveBakeryRequest')->name('bakery_req.approve');
+        Route::get('reject/{kitchen_request}', 'RequestController@rejectBakeryRequest')->name('bakery_req.reject');
+
 
     });
 
