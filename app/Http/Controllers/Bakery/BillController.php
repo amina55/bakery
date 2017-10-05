@@ -113,10 +113,10 @@ class BillController extends Controller
      */
     public function show(Bill $bill)
     {
-        /*echo "<pre>";
-        print_r($bill);*/
+        $billItems = BillItem::getBillItems($bill->id);
+        return view('bakery.bill.show', ['bill' => $bill, 'billItems' => $billItems]);
 
-        return redirect()->route('bill.index');
+      //  return redirect()->route('bill.index');
     }
 
     /**

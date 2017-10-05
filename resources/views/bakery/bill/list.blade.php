@@ -20,12 +20,9 @@
                 <td>{{ date('d-m-Y', strtotime($bill->created_at)) }}</td>
 
                 <td class="centralized-text">
-                    <a {{--href="{{ route('bill.edit', [$bill->id]) }}"--}} class="no-text-decoration" title="{{ trans('content.edit_item') }}">
-                        <i class="fa fa-lg fa-pencil"></i>
+                    <a href="{{ route('bill.show', [$bill->id]) }}" target="_blank" class="no-text-decoration" title="{{ trans('content.edit_item') }}">
+                        <i class="fa fa-lg fa-print"></i>
                     </a>
-                   {{-- <a href="{{ route('bill.destroy', [$bill->id]) }}" class="no-text-decoration" title="{{ trans('content.delete_item') }}">
-                        <i class="fa fa-lg fa-trash"></i>
-                    </a>--}}
                 </td>
             </tr>
         @endforeach
