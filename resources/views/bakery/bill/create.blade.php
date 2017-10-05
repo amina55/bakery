@@ -63,8 +63,7 @@
                     '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="quantity'+total_rows+'" name="quantity'+total_rows+'"  min="0" class="form-control" type="number"> </td>'+
                     '<td> <label id="rate'+total_rows+'"></label> </td> '+
                     '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="discount'+total_rows+'" name="discount'+total_rows+'" min="0" class="form-control" type="number"> </td> ' +
-                    '<td> <label id="amount'+total_rows+'"></label> </td>' +
-                    '<td>remove </td></tr>';
+                    '<td> <label id="amount'+total_rows+'"></label> </td></tr>';
                 $('.bill_items').append(appendChild);
 
                 total_rows++;
@@ -163,9 +162,9 @@
 
 
                 <div class="form-group{{ $errors->has('bill_type') ? ' has-error' : '' }}">
-                    <label for="bill_type" class="col-md-4 control-label">Bill Type</label>
+                    <label for="bill_type" class="col-sm-4 control-label">Bill Type</label>
 
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
 
                         <select id="bill_type" class="form-control" name="bill_type">
                             <option value="b2c"> Business to Customer</option>
@@ -180,9 +179,9 @@
                 </div>
 
                 <div class="form-group{{ $errors->has('customer_name') ? ' has-error' : '' }}">
-                    <label for="customer_name" class="col-md-4 control-label">Customer Name</label>
+                    <label for="customer_name" class="col-sm-4 control-label">Customer Name</label>
 
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
 
                         <div id="b2b_customers">
                             <select id="customer_name" class="form-control" name="b2b_customer_name">
@@ -205,9 +204,9 @@
                 </div>
 
                 {{--<div class="form-group{{ $errors->has('customer_gstin_no') ? ' has-error' : '' }}">
-                    <label for="customer_gstin_no" class="col-md-4 control-label">Customer Gstin No.</label>
+                    <label for="customer_gstin_no" class="col-sm-4 control-label">Customer Gstin No.</label>
 
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
 
                         <input placeholder="Customer Gstin No." class="form-control" type="text" name="customer_gstin_no">
                         @if ($errors->has('customer_gstin_no'))
@@ -219,9 +218,9 @@
                 </div>--}}
 
                 <div class="form-group{{ $errors->has('care_of') ? ' has-error' : '' }}">
-                    <label for="care_of" class="col-md-4 control-label">Care of.</label>
+                    <label for="care_of" class="col-sm-4 control-label">Care of.</label>
 
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
 
                         <input placeholder="Customer Care Of." class="form-control" type="text" name="care_of">
                         @if ($errors->has('care_of'))
@@ -243,7 +242,6 @@
                             <th>Rate</th>
                             <th>Discount ( Rs. )</th>
                             <th>Amount</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody class="bill_items">
@@ -276,9 +274,6 @@
                             <td>
                                 <label id="amount1"></label>
                             </td>
-                            <td>
-                                remove
-                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -292,33 +287,33 @@
                 <div class="row">
 
                     <div class="form-group">
-                        <label for="total_amount" class="col-md-4 control-label"> Total Amount </label>
+                        <label for="total_amount" class="col-sm-4 control-label"> Total Amount </label>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <input class="total_amount form-control" name="total_amount" required value="{{ old('total_amount') ? old('total_amount') : 0 }}" disabled>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="total_tax" class="col-md-4 control-label"> Total Tax (18%)  </label>
+                        <label for="total_tax" class="col-sm-4 control-label"> Total Tax (18%)  </label>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <input class="total_tax form-control" name="total_tax" required value="{{ old('total_tax') ? old('total_tax') : 0 }}" disabled>
                         </div>
-                        <label for="cgst_tax" class="col-md-1 control-label"> CGST(9%)  </label>
-                        <div class="col-md-1">
+                        <label for="cgst_tax" class="col-sm-1 control-label"> CGST(9%)  </label>
+                        <div class="col-sm-1">
                             <input class="cgst_tax form-control" required value="{{ old('cgst_tax') ? old('cgst_tax') : 0 }}" disabled>
                         </div>
-                        <label for="sgst_tax" class="col-md-1 control-label"> SGST(9%)  </label>
-                        <div class="col-md-1">
+                        <label for="sgst_tax" class="col-sm-1 control-label"> SGST(9%)  </label>
+                        <div class="col-sm-1">
                             <input class="sgst_tax form-control" required value="{{ old('sgst_tax') ? old('sgst_tax') : 0 }}" disabled>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="total_discount" class="col-md-4 control-label"> Total Discount ( % ) </label>
+                        <label for="total_discount" class="col-sm-4 control-label"> Total Discount ( % ) </label>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0" id="total_discount" name="total_discount" class="form-control" type="number" value="{{ old('total_discount') ? old('total_discount') : 0 }}" onblur="calculatePayable()">
                             @if ($errors->has('total_discount'))
                                 <span class="help-block">
@@ -329,17 +324,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="payable_amount" class="col-md-4 control-label"> Payable Amount </label>
+                        <label for="payable_amount" class="col-sm-4 control-label"> Payable Amount </label>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <input class="payable_amount form-control" name="payable_amount" required value="{{ old('payable_amount') ? old('payable_amount') : 0 }}" disabled>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="paid_amount" class="col-md-4 control-label"> Paid Amount </label>
+                        <label for="paid_amount" class="col-sm-4 control-label"> Paid Amount </label>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <input pattern="[0-9]+([\.,][0-9]+)?" step="1" min="1" id="paid_amount" name="paid_amount" class="form-control" type="number" required value="{{ old('paid_amount') ? old('paid_amount') : 0 }}" onblur="calculateRemaining()"> </div>
                             @if ($errors->has('paid_amount'))
                                 <span class="help-block">
@@ -349,9 +344,9 @@
                         </div>
 
                     <div class="form-group">
-                        <label for="remaining" class="col-md-4 control-label"> Remaining Amount </label>
+                        <label for="remaining" class="col-sm-4 control-label"> Remaining Amount </label>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <input class="remaining form-control" name="remaining" required value="{{ old('remaining') ? old('remaining') : 0 }}" disabled>
                         </div>
                     </div>
