@@ -14,6 +14,8 @@
         </div>
     </div>
 
+    <input type="hidden" id="products" value="{{ $products }}">
+
     <!-- Modal -->
     <div id="createNewStockModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -29,15 +31,30 @@
                     </div>
                     <div class="modal-body">
 
+                        <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
+                            <label for="category_id" class="col-md-4 control-label">Category</label>
+
+                            <div class="col-md-6">
+                                <select id="category_id" name="category_id" class="form-control" required>
+                                    <option value=""> --- select a category --- </option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('category_id'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('category_id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-md-4 control-label">Product</label>
 
                             <div class="col-md-6">
                                 <select id="product_id" name="product_id" class="form-control" required>
                                     <option value=""> --- select a product --- </option>
-                                    @foreach($products as $product)
-                                        <option value="{{ $product->id }}"> {{ $product->name }} </option>
-                                    @endforeach
                                 </select>
                                 @if ($errors->has('product_id'))
                                     <span class="help-block">
@@ -99,14 +116,37 @@
             </form>
         </div>
     </div>
-    
-    
+
+
     <script>
-        
+
+        var products = $('#products').val();
+        products = JSON.parse(products);
+        var units = [];
+
+        for(var j=0; j < products.length; j++) {
+            units[products[j].id] = products[j].unit.name;
+        }
+
+        $('#category_id').change(function () {
+            var categoryId = $(this).val();
+            var optionsHTML = '<option  value="">--- select an item ---</option>';
+
+            for(var j=0; j < products.length; j++)
+            {
+                if(categoryId == products[j].category_id) {
+                    optionsHTML += '<option value="'+ products[j].id +'">'+ products[j].name +'</option>';
+                }
+            }
+            $('#product_id').html(optionsHTML);
+            $('#product_unit').html('');
+
+        });
+
         $('#product_id').change(function () {
 
-            $('#product_unit').html('liter');
+            var product = $(this).val();
+            $('#product_unit').html(units[product]);
         });
     </script>
-
 @endsection

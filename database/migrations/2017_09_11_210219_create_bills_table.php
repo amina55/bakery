@@ -26,9 +26,9 @@ class CreateBillsTable extends Migration
             $table->float('payable_amount');
             $table->float('paid_amount');
 
-            $table->string('customer_name');
-            $table->string('care_of');
-            $table->string('customer_gstin_no');
+            $table->string('customer_name')->nullable();
+            $table->string('care_of')->nullable();
+            $table->string('customer_gstin_no')->nullable();
             $table->boolean('status')->default(1);
 
 

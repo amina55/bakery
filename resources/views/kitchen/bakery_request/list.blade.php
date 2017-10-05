@@ -70,7 +70,7 @@
                     <div class="form-group">
                         <label for="approve_quantity" class="col-md-4 control-label">Approved Quantity</label>
                         <div class="col-md-6">
-                            <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.1" min="0.1" id="approve_quantity" class="form-control" name="approve_quantity">
+                            <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.1" min="0.1" id="approve_quantity" class="form-control" name="approve_quantity" required>
                         </div>
                     </div>
 

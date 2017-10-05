@@ -4,12 +4,17 @@
 
     <script>
         $(document).ready(function() {
+
+            $('#b2b_customers').hide();
             var total_rows = 2;
             var total_amount = 0;
             var total_tax = 0;
             var payable_amount = 0;
             var stock_items = $('#stock_items').val();
             stock_items = JSON.parse(stock_items);
+
+            var categories = $('#categories').val();
+            categories = JSON.parse(categories);
             var units = [];
             var rates = [];
 
@@ -17,6 +22,22 @@
                 units[stock_items[j].id] = stock_items[j].multiplier +' '+ stock_items[j].product.unit.name;
                 rates[stock_items[j].id] = stock_items[j].price;
             }
+
+            $('body').on('change', '[id^="category_id"]', function(){
+                var categoryId = $(this).val();
+                var id = $(this).attr('id');
+                var optionsHTML = '<option  value="">--- select an item ---</option>';
+
+                for(var j=0; j < stock_items.length; j++)
+                {
+                    if(categoryId == stock_items[j].category_id) {
+                        optionsHTML += '<option value="'+ stock_items[j].id +'">'+ stock_items[j].product.name +'</option>';
+                    }
+                }
+
+                var stockId = id.replace('category_id', 'stock_item');
+                $('#'+stockId).html(optionsHTML);
+            });
 
             $('body').on('change', '[id^="stock_item"]', function(){
                 var product = $(this).val();
@@ -31,14 +52,14 @@
 
             $('.add_new_row').click(function () {
 
-                var appendChild = '<tr><td><select id="stock_item'+total_rows+'" name="stock_item'+total_rows+'" class="form-control">'+
-                    '<option value="">--- select an item ---</option> ';
-
-                for (var i = 0; i < stock_items.length; i++) {
-                    appendChild += '<option value="'+ stock_items[i].id +'">'+ stock_items[i].product.name +'</option>';
+                var appendChild = '<tr><td><select id="category_id'+total_rows+'" name="category_id'+total_rows+'" class="form-control" required>' +
+                    '<option  value="">--- select a category ---</option>';
+                for (var i = 0; i < categories.length; i++) {
+                    appendChild += '<option value="'+ categories[i].id +'">'+ categories[i].name +'</option>';
                 }
 
-                appendChild += '</select></td><td> <label id="unit'+total_rows+'"> unit</label> </td> ' +
+                appendChild += '</select></td><td><select id="stock_item'+total_rows+'" name="stock_item'+total_rows+'" class="form-control">'+
+                    '<option value="">--- select an item ---</option></select></td><td> <label id="unit'+total_rows+'"> unit</label> </td> ' +
                     '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" id="quantity'+total_rows+'" name="quantity'+total_rows+'"  min="0" class="form-control" type="number"> </td>'+
                     '<td> <label id="rate'+total_rows+'"></label> </td> '+
                     '<td> <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01"  id="discount'+total_rows+'" name="discount'+total_rows+'" min="0" class="form-control" type="number"> </td> ' +
@@ -110,6 +131,16 @@
                 var remaining = payable_amount - paid_amount;
                 $('.remaining').val(remaining.toFixed(2));
             }
+            $('#bill_type').change(function () {
+                var billType = $(this).val();
+                if(billType == 'b2b') {
+                    $('#b2b_customers').show();
+                    $('#b2c_customers').hide();
+                } else {
+                    $('#b2b_customers').hide();
+                    $('#b2c_customers').show();
+                }
+            });
         });
     </script>
 
@@ -119,6 +150,7 @@
         <div class="container">
             <div class="row">
                 <div class="error-show"></div>
+                <input type="hidden" id="categories" name="categories" value="{{ $categories }}">
                 <input type="hidden" id="stock_items" name="stock_items" value="{{ $stocks }}">
                 <input type="hidden" name="total_rows" id="total_rows" value="1">
                 <input type="hidden" name="total_amount" class="total_amount">
@@ -130,19 +162,61 @@
                 <input type="hidden" name="remaining" class="remaining">
 
 
+                <div class="form-group{{ $errors->has('bill_type') ? ' has-error' : '' }}">
+                    <label for="bill_type" class="col-md-4 control-label">Bill Type</label>
+
+                    <div class="col-md-3">
+
+                        <select id="bill_type" class="form-control" name="bill_type">
+                            <option value="b2c"> Business to Customer</option>
+                            <option value="b2b"> Business to Business</option>
+                        </select>
+                        @if ($errors->has('bill_type'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('bill_type') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
                 <div class="form-group{{ $errors->has('customer_name') ? ' has-error' : '' }}">
                     <label for="customer_name" class="col-md-4 control-label">Customer Name</label>
 
                     <div class="col-md-3">
 
-                        <input placeholder="Customer Name" class="form-control" type="text" name="customer_name">
-                        @if ($errors->has('customer_name'))
+                        <div id="b2b_customers">
+                            <select id="customer_name" class="form-control" name="b2b_customer_name">
+                                @foreach($customers as $customer)
+                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div id="b2c_customers">
+                            <input placeholder="Customer Name" class="form-control" type="text" name="b2c_customer_name">
+                        </div>
+
+                    @if ($errors->has('customer_name'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('customer_name') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
+
+                {{--<div class="form-group{{ $errors->has('customer_gstin_no') ? ' has-error' : '' }}">
+                    <label for="customer_gstin_no" class="col-md-4 control-label">Customer Gstin No.</label>
+
+                    <div class="col-md-3">
+
+                        <input placeholder="Customer Gstin No." class="form-control" type="text" name="customer_gstin_no">
+                        @if ($errors->has('customer_gstin_no'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('customer_gstin_no') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>--}}
 
                 <div class="form-group{{ $errors->has('care_of') ? ' has-error' : '' }}">
                     <label for="care_of" class="col-md-4 control-label">Care of.</label>
@@ -162,6 +236,7 @@
                     <table class="table">
                         <thead>
                         <tr>
+                            <th>Category</th>
                             <th>Products</th>
                             <th>Unit</th>
                             <th>Quantity</th>
@@ -174,11 +249,16 @@
                         <tbody class="bill_items">
                         <tr>
                             <td>
+                                <select id="category_id1" name="category_id1" class="form-control" required>
+                                    <option  value="">--- select a category ---</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
                                 <select id="stock_item1" name="stock_item1" class="form-control" required>
                                     <option  value="">--- select an item ---</option>
-                                    @foreach($stocks as $stock)
-                                        <option value="{{ $stock->id }}">{{$stock->product->name}}</option>
-                                    @endforeach
                                 </select>
                             </td>
                             <td>
@@ -260,7 +340,7 @@
                         <label for="paid_amount" class="col-md-4 control-label"> Paid Amount </label>
 
                         <div class="col-md-3">
-                            <input pattern="[0-9]+([\.,][0-9]+)?" step="0.01" min="0" id="paid_amount" name="paid_amount" class="form-control" type="number" required value="{{ old('paid_amount') ? old('paid_amount') : 0 }}" onblur="calculateRemaining()"> </div>
+                            <input pattern="[0-9]+([\.,][0-9]+)?" step="1" min="1" id="paid_amount" name="paid_amount" class="form-control" type="number" required value="{{ old('paid_amount') ? old('paid_amount') : 0 }}" onblur="calculateRemaining()"> </div>
                             @if ($errors->has('paid_amount'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('paid_amount') }}</strong>

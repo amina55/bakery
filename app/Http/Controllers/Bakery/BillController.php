@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Bakery;
 use App\BakeryStock;
 use App\Bill;
 use App\BillItem;
+use App\Category;
+use App\Customer;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,7 +37,10 @@ class BillController extends Controller
     {
         $stocks = BakeryStock::getStock();
         $products = Product::getProduct();
-        return view('bakery.bill.create', ['products' => $products, 'stocks' => $stocks]);
+        $categories = Category::getCategory();
+        $customers = Customer::getCustomer();
+        return view('bakery.bill.create',
+            ['products' => $products, 'stocks' => $stocks, 'categories' => $categories, 'customers' => $customers]);
     }
 
     /**
@@ -46,8 +51,16 @@ class BillController extends Controller
      */
     public function store(Request $request)
     {
-        $route = 'bill.index';
         $inputs = $request->all();
+        $customerId = $inputs['bill_type'].'_customer_name';
+        $customerName = $inputs[$customerId] ? $inputs[$customerId] :'';
+        $gstinNo = '';
+        if($inputs['bill_type'] == 'b2b') {
+            $customer = Customer::getCustomerById($customerName);
+            $customerName = $customer->name;
+            $gstinNo = $customer->gstin_no;
+        }
+
         $bill = Bill::create([
             'bill_no' => strtotime('now'),
             'total_amount' => $inputs['total_amount'],
@@ -57,9 +70,9 @@ class BillController extends Controller
             'discount' => $inputs['total_discount'],
             'payable_amount' => $inputs['payable_amount'],
             'paid_amount' => $inputs['paid_amount'],
-            'customer_name' => $inputs['customer_name'],
-            'care_of' => $inputs['care_of'],
-            'customer_gstin_no' => '',
+            'customer_name' => $customerName,
+            'care_of' => $inputs['care_of'] ? $inputs['care_of'] : '',
+            'customer_gstin_no' => $gstinNo,
             'user_name' => Auth::user()->name,
         ]);
 
@@ -76,6 +89,7 @@ class BillController extends Controller
                 BillItem::create([
                     'bill_id' => $bill->id,
                     'stock_id' => $stockId,
+                    'category_id' => $inputs['category_id'.$i],
                     'product_id' => $productId,
                     'quantity' => $quantity,
                     'rate' => $price,
@@ -88,7 +102,7 @@ class BillController extends Controller
                 BakeryStock::decreaseQuantity($stockId, $quantity);
             }
         }
-        return redirect()->route($route);
+        return redirect()->route('bill.show', $bill->id);
     }
 
     /**
@@ -99,7 +113,10 @@ class BillController extends Controller
      */
     public function show(Bill $bill)
     {
-        //
+        /*echo "<pre>";
+        print_r($bill);*/
+
+        return redirect()->route('bill.index');
     }
 
     /**

@@ -15,6 +15,6 @@ class Product extends Model
 
     public static function getProduct()
     {
-        return self::where('status', 1)->get();
+        return self::where('status', 1)->with('unit')->get();
     }
 }

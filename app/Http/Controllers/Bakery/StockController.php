@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bakery;
 
 use App\BakeryStock;
+use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,9 @@ class StockController extends Controller
     {
         $stock = BakeryStock::with('product')->get();
         $products = Product::getProduct();
-        return view('bakery.stock.index', ['stocks' => $stock, 'products' => $products]);
+        $categories = Category::getCategory();
+
+        return view('bakery.stock.index', ['stocks' => $stock, 'products' => $products, 'categories' => $categories]);
     }
 
     /**

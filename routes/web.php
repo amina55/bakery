@@ -116,7 +116,7 @@ Route::group(['middleware' => 'auth'], function (){
         /* ---- Bills ----*/
 
         Route::get('bill/destroy/{bill}', 'BillController@destroy')->name('bill.destroy');
-        Route::resource('bill', 'BillController', ['except' => ['show', 'destroy']]);
+        Route::resource('bill', 'BillController', ['except' => ['destroy']]);
 
         /* ---- Bakery's Request ----*/
 
