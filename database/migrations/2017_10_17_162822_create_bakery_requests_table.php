@@ -16,16 +16,27 @@ class CreateBakeryRequestsTable extends Migration
         Schema::create('bakery_requests', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('stock_id');
-            $table->unsignedInteger('quantity');
+            $table->unsignedInteger('stock_id')->nullable();
+            $table->unsignedInteger('order_id')->nullable();
+            $table->unsignedInteger('order_item_id')->nullable();
+            $table->unsignedInteger('product_id');
+            $table->float('weight');
+            $table->float('quantity');
+            $table->float('approve_quantity')->default(0);
             $table->timestamp('demand_date');
             $table->timestamp('deliver_date')->nullable();
-            $table->enum('status', ['approved', 'rejected', 'waiting'])->default('waiting');
+            $table->enum('status', ['approved', 'rejected', 'waiting', 'working'])->default('waiting');
             $table->enum('request_to', ['kitchen', 'store'])->default('kitchen');
-            $table->string('rejection_reason')->nullable();
+            $table->string('rejection_reason', 100)->nullable();
+            $table->string('special_note', 100)->nullable();
+
             $table->timestamps();
 
             $table->foreign('stock_id')->references('id')->on('bakery_stocks')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('order_item_id')->references('id')->on('order_items')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
         });
     }
 

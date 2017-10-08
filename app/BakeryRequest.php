@@ -14,6 +14,13 @@ class BakeryRequest extends Model
     }
     public static function getRequests()
     {
-        return self::with('stock.product')->get();
+        return self::where('status', 1)->with('stock.product')->get();
+    }
+
+    public static function orderToKitchen($orderItem)
+    {
+        return self::create([
+            ''
+        ]);
     }
 }

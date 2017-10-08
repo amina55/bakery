@@ -73,6 +73,19 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group{{ $errors->has('stock') ? ' has-error' : '' }}">
+                            <label for="stock" class="col-md-4 control-label">Stock</label>
+
+                            <div class="col-md-6">
+                                <input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.1" min="0" id="stock" class="form-control" name="stock" value="{{ old('stock') ? old('stock') : 0}}" required>
+                                @if ($errors->has('stock'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('stock') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <input type="submit" class="btn btn-primary" value="Save">

@@ -5,27 +5,27 @@
         <div class="row">
 
             <div class="col-sm-12">
-                <a href="{{ route('bill.create') }}" class="btn btn-large style-btn" >Add New Bill</a>
+                <a href="{{ route('order.create') }}" class="btn btn-large style-btn" >Add New Order</a>
             </div>
             <br><br><br>
 
-            <form action="{{ route('bill.index') }}" method="get" class="form-horizontal">
+            <form action="{{ route('order.index') }}" method="get" class="form-horizontal">
 
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <label class="col-sm-2"> Bill Date </label>
+                        <label class="col-sm-2"> Order Date </label>
                         <div class="col-sm-4">
-                            <input placeholder="Bill Date" class="date-format form-control" type="text" name="bill_date" value="{{ ($billDate) ? $billDate : '' }}">
+                            <input placeholder="Order Date" class="date-format form-control" type="text" name="order_date" value="{{ ($orderDate) ? $orderDate : '' }}">
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <label class="col-sm-2 mt10"> Bill No.</label>
+                        <label class="col-sm-2 mt10"> Order No.</label>
 
                         <div class="col-sm-4">
-                            <input type="text" id="bill_no" name="bill_no" class="form-control" value="{{ ($billNo) ? $billNo : '' }}">
+                            <input type="text" id="order_no" name="order_no" class="form-control" value="{{ ($orderNo) ? $orderNo : '' }}">
                         </div>
                         <div class="col-sm-2">
                             <input class="btn btn-large style-btn" type="submit" value="Search">
@@ -37,7 +37,7 @@
         </div>
         <div class="row">
             <div class="visible-block sorted-records-wrapper sorted-records">
-                @include('bakery.bill.list')
+                @include('bakery.order.list')
             </div>
         </div>
     </div>

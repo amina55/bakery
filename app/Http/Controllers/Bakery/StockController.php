@@ -17,7 +17,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stock = BakeryStock::with('product')->get();
+        $stock = BakeryStock::getStock();
         $products = Product::getProduct();
         $categories = Category::getCategory();
 
@@ -51,7 +51,7 @@ class StockController extends Controller
      */
     public function destroy($bakeryStockId)
     {
-        BakeryStock::where('id', $bakeryStockId)->delete();
+        BakeryStock::where('id', $bakeryStockId)->update(['status' => 0]);
         return redirect()->route('bakery_stock.index');
     }
 }

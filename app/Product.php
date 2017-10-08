@@ -13,8 +13,12 @@ class Product extends Model
         return $this->belongsTo('App\Unit');
     }
 
-    public static function getProduct()
+    public static function getProduct($categoryId = '')
     {
-        return self::where('status', 1)->with('unit')->get();
+        $query = self::where('status', 1);
+        if($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+        return $query->with('unit')->get();
     }
 }

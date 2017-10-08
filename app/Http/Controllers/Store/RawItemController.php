@@ -98,7 +98,8 @@ class RawItemController extends Controller
      */
     public function destroy(RawItem $rawItem)
     {
-        $rawItem->delete();
+        $rawItem->status = 0;
+        $rawItem->save();
         return redirect()->back();
     }
 }

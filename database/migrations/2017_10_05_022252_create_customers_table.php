@@ -19,6 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string('gstin_no', 50)->nullable();
             $table->string('address', 100)->nullable();
             $table->string('phone_no', 30)->nullable();
+            $table->string('type', 30)->default('b2b');
             $table->boolean('status')->default(1);
 
             $table->timestamps();

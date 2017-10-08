@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Bakery;
 
+use App\BakeryStock;
 use App\Category;
 use App\Product;
 use App\Unit;
@@ -18,7 +19,7 @@ class ProductController extends Controller
      */
     public function index($categoryID)
     {
-        $products = Product::where('category_id', $categoryID)->with('unit')->get();
+        $products = Product::getProduct($categoryID);
         $category = Category::find($categoryID);
         $units = Unit::getActive();
         return view('bakery.product.index', ['products' => $products, 'category' => $category, 'units' => $units]);
@@ -42,7 +43,15 @@ class ProductController extends Controller
             Product::where('id', $request->get('id'))->update($update);
         } else {
             $update['category_id'] = $categoryID;
-            Product::create($update);
+            $product = Product::create($update);
+
+            BakeryStock::create([
+                'category_id' => $categoryID,
+                'product_id' => $product->id,
+                'price' => $request->get('price'),
+                'multiplier' => 1,
+                'quantity' => $request->get('stock')
+            ]);
         }
 
         return redirect()->route('product.index', $categoryID);
@@ -57,7 +66,13 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $categoryID = $product->category_id;
-        $product->delete();
+
+        BakeryStock::where('product_id', $product->id)->update(['status' => 0]);
+
+        $product->status = 0;
+        $product->save();
+
+
         return redirect()->route('product.index', $categoryID);
     }
 }

@@ -95,7 +95,8 @@ class RequestController extends Controller
      */
     public function destroy(BakeryRequest $bakeryRequest)
     {
-        $bakeryRequest->delete();
+        $bakeryRequest->status = 0;
+        $bakeryRequest->save();
         return redirect()->route('bakery_request.index');
     }
 }

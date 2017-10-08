@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Bakery;
 
+use App\BakeryStock;
 use App\Category;
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -47,7 +49,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
+        Product::where('category_id', $category->id)->update(['status' => 0]);
+        BakeryStock::where('category_id', $category->id)->update(['status' => 0]);
+        $category->status = 0;
         return redirect()->route('category.index');
     }
 }

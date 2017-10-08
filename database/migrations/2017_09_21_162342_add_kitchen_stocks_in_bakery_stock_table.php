@@ -14,12 +14,15 @@ class AddKitchenStocksInBakeryStockTable extends Migration
     public function up()
     {
         Schema::table('bakery_stocks', function (Blueprint $table) {
-            $table->float('kitchen_quantity')->default(0);
+            $table->float('kitchen_quantity')->default(0)->after('quantity');
+            $table->unsignedInteger('category_id')->nullable()->after('id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
         });
 
-        Schema::table('bakery_requests', function (Blueprint $table) {
-            $table->float('approve_quantity')->default(0);
+        Schema::table('bill_items', function (Blueprint $table) {
+            $table->unsignedInteger('category_id')->nullable()->after('id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
         });
     }
@@ -32,11 +35,13 @@ class AddKitchenStocksInBakeryStockTable extends Migration
     public function down()
     {
         Schema::table('bakery_stocks', function (Blueprint $table) {
-            $table->dropColumn('kitchen_quantity');
+            $table->dropForeign(['category_id']);
+            $table->dropColumn(['category_id', 'kitchen_quantity']);
         });
 
-        Schema::table('bakery_requests', function (Blueprint $table) {
-            $table->dropColumn('approve_quantity');
+        Schema::table('bill_items', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+            $table->dropColumn('category_id');
         });
     }
 }

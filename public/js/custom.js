@@ -8,5 +8,9 @@ $(document).ready(function() {
 
     $('.date-format').datepicker({
         maxDate: new Date()
+    })
+
+    $('.date-format-min').datepicker({
+        minDate: new Date()
     });
 });

@@ -118,6 +118,11 @@ Route::group(['middleware' => 'auth'], function (){
         Route::get('bill/destroy/{bill}', 'BillController@destroy')->name('bill.destroy');
         Route::resource('bill', 'BillController', ['except' => ['destroy']]);
 
+        /* ---- Orders ----*/
+
+        Route::get('order/destroy/{order}', 'OrderController@destroy')->name('order.destroy');
+        Route::resource('order', 'OrderController', ['except' => ['destroy']]);
+
         /* ---- Bakery's Request ----*/
 
         Route::get('request', 'RequestController@index')->name('bakery_request.index');
